@@ -1,13 +1,13 @@
 var http = require('http');
-var https = require('https');
+var request = require('request');
 var express = require('express');
 var os = require( 'os' );
 var ejs = require('ejs');
-var request = require('request');
 
+var apiResults;
 
-var serverPort = process.env.SERVER_PORT || 54100;
-var clientPort = process.env.CLIENT_PORT || 54101;
+var serverPort = process.env.SERVER_PORT || 45714;
+var clientPort = process.env.CLIENT_PORT || 45715;
 
 var networkInterfaces = os.networkInterfaces( );
 
@@ -27,7 +27,6 @@ function getIpAddress() {
 
 var serverHost = '//'+getIpAddress()+':'+serverPort;
 var platformScript = '/3rd/platform.js';
-
 //Platform server
 var serverApp = express();
 
@@ -68,60 +67,23 @@ serverApp.get(platformScript, function(req, res) {
 });
 
 //responde to widget API
-serverApp.get('/api/3rd/foo-widget/init/:id', function(req, res) {
-    var id = req.params.id;
-    res.send('api response #'+id);
-});
+// serverApp.get('/api/3rd/foo-widget/init/:id', function(req, res) {
+//     var id = req.params.id;
+//     res.send('api response #'+id);
+// });
 serverApp.use(express.static('server'));
-
-
-// request.get({url: 'https://dev.tn-apis.com/catalog/v1/events/search?q=duck', headers: {
-//     'x-listing-context': 'website-config-id=237','Authorization': 'Bearer 3448f98a-ac8b-3216-beee-8584175c6070','Accept': 'application/json','Content-Type': 'application/json'}}, function(err, res, body){
-//   if(err) return err.message;
-//       console.log(body);
-//     }).on('error', function(e){
-//         console.log(e)
-//       }).end()
-var options = {
-  host: 'https://dev.tn-apis.com',
-  path: '/catalog/v1/events/search?q=duck',
-  method: 'get',
-  port: serverPort,
-  headers: {'x-listing-context': 'website-config-id=237','Authorization': 'Bearer 3448f98a-ac8b-3216-beee-8584175c6070','Content-Type': 'application/json', 'Accept': 'application/json'}
-}
-
-var req = https.request(options, function(res) {
-  console.log('STATUS: '  + res.statusCode);
-  console.log('HEADERS: ' + JSON.parse(res.headers));
-  res.setEncoding('utf8');
-  res.on('data', function(chunk) {
-    console.log('BODY: ' + chunk);
-  });
-  res.on('end', function() {
-    console.log('No more data in response.');
-  });
-});
-
-req.on('error', function(e) {
-  console.error('problem with request: ' + e.message);
-});
-
-
-req.end();
-
 
 //3rd party using widgets served by platform server
 var clientApp = express();
 clientApp.set('view engine', 'html');
 clientApp.engine('html', ejs.renderFile);
+
 clientApp.get('/', function(req, res) {
 
-
-
-    res.render('client/index', {
-        serverHost: serverHost,
-        platformScript: platformScript,
-    });
+      res.render('client/index', {
+          serverHost: serverHost,
+          platformScript: platformScript
+      });
 });
 
 http.createServer(serverApp).listen(serverPort);

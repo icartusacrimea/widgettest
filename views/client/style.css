@@ -1,0 +1,51 @@
+* {
+  font-family: 'Roboto', 'Open Sans', sans-serif;
+}
+
+.result-card {
+  border: 1px solid #DDD;
+  margin: 0 auto;
+}
+
+.centerVertical {
+  margin: auto;
+  padding: 15px;
+}
+
+.alignRight {
+    text-align: right;
+}
+
+.normalParagraph {
+  line-height: 17px;
+  font-size: 15px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.borderRight {
+    border-right: 1px solid #DDD;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0;
+}
+
+.ticketsButton {
+    margin-bottom: 5px;
+    padding: 4px 9px 4px 9px;
+    background: black;
+    border: none;
+    transition: .3s;
+}
+
+.ticketsButton:hover {
+    background: #28a745;
+}
+
+.col-2, .col-3, .col-7 {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}

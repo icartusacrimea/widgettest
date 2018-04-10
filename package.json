@@ -13,11 +13,20 @@
     "embed"
   ],
   "author": "bguiz",
-  "license": "GPLv3",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.6.3",
     "ejs": "^1.0.0",
     "express": "^4.8.3",
-    "node-fetch": "^2.1.2"
-  }
+    "node-fetch": "^2.1.2",
+    "request": "^2.85.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icartusacrimea/widgettest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/icartusacrimea/widgettest/issues"
+  },
+  "homepage": "https://github.com/icartusacrimea/widgettest#readme"
 }
