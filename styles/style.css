@@ -17,10 +17,17 @@
 }
 
 .normalParagraph {
-  line-height: 17px;
+  line-height: 18px;
   font-size: 15px;
   margin: 0;
-  font-weight: 500;
+}
+
+.normalParagraphWeight {
+  font-weight: 400;
+}
+
+.slightlyBoldParagraph {
+  font-weight: 700;
 }
 
 .borderRight {
@@ -28,7 +35,7 @@
 }
 
 .title {
-  font-weight: bold;
+  font-weight: 800;
   font-size: 18px;
   margin: 0;
 }

@@ -2,8 +2,15 @@
 <head>
 </head>
 <body>
-
-<div id="target-output"></div><script src="<%= serverHost %><%= platformScript %>" async></script>
-
+	<h1 style="text-align:center;">Phony Client Site</h1>
+	<div style="text-align:center;">
+        <form>
+            <input style="border: 1px solid grey; padding: 3px;" type="text" placeholder="Search.." name="search">
+            <button id="submitSearchTerm">Search</button>
+        </form>
+    </div>
+	<hr>
+	<!-- user will need to paste the following in their project where they wish to display events-listing widget -->
+	<div id="target-output"></div><script src="<%= serverHost %><%= platformScript %>" async></script>
 </body>
 </html>

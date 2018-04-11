@@ -1,10 +1,8 @@
-var http = require('http');
-var request = require('request');
-var express = require('express');
-var os = require( 'os' );
-var ejs = require('ejs');
-
-var apiResults;
+var http = require('http'),
+request = require('request'),
+express = require('express'),
+os = require( 'os' ),
+ejs = require('ejs');
 
 var serverPort = process.env.SERVER_PORT || 45714;
 var clientPort = process.env.CLIENT_PORT || 45715;
@@ -25,36 +23,31 @@ function getIpAddress() {
     return '127.0.0.1';
 }
 
+//eventually, actual domain will be supplied instead of generating one from IP address
 var serverHost = '//'+getIpAddress()+':'+serverPort;
 var platformScript = '/3rd/platform.js';
-//Platform server
 var serverApp = express();
 
-//enable CORS
-serverApp.use(function(req, res, next) {
-    //only for paths that come under /api/3rd
-    if ((/^\/api\/3rd\/.+$/).test(req.path)) {
-        //TODO if more security is required, perhaps ask each user to login to
-        //an admin panel and white list the domains that they would like to embed these widgets on
-        //Then test here that the domain matches
-        var corsOrigin = req.headers.origin;
-        var corsMethod = req.headers['access-control-request-method'];
-        var corsHeaders = req.headers['access-control-request-headers'];
-        var hasACorsFlag = corsOrigin || corsMethod || corsHeaders;
-        //console.log('cors middleware xhr', hasACorsFlag, corsOrigin, corsMethod, corsHeaders);
-        if (hasACorsFlag) {
-            res.header('Access-Control-Allow-Origin', corsOrigin);
-            res.header('Access-Control-Allow-Methods', corsMethod);
-            res.header('Access-Control-Allow-Headers', corsHeaders);
-            res.header('Access-Control-Max-Age', 60 * 60 * 24);
-            if (req.method === 'OPTIONS') {
-                res.send(200);
-                return;
-            }
-        }
-    }
-    next();
-});
+//if we decide to enable CORS
+// serverApp.use(function(req, res, next) {
+//     if ((/^\/api\/3rd\/.+$/).test(req.path)) {
+//         var corsOrigin = req.headers.origin;
+//         var corsMethod = req.headers['access-control-request-method'];
+//         var corsHeaders = req.headers['access-control-request-headers'];
+//         var hasACorsFlag = corsOrigin || corsMethod || corsHeaders;
+//         if (hasACorsFlag) {
+//             res.header('Access-Control-Allow-Origin', corsOrigin);
+//             res.header('Access-Control-Allow-Methods', corsMethod);
+//             res.header('Access-Control-Allow-Headers', corsHeaders);
+//             res.header('Access-Control-Max-Age', 60 * 60 * 24);
+//             if (req.method === 'OPTIONS') {
+//                 res.send(200);
+//                 return;
+//             }
+//         }
+//     }
+//     next();
+// });
 
 //serve platform script file
 serverApp.engine('js', ejs.renderFile);
@@ -63,23 +56,21 @@ serverApp.get(platformScript, function(req, res) {
     res.render('server'+platformScript, {
         serverHost: serverHost,
         platformScript: platformScript,
+        xListingContent: 'website-config-id=237',
+        authorization: 'Bearer 3448f98a-ac8b-3216-beee-8584175c6070'
     });
 });
 
-//responde to widget API
-// serverApp.get('/api/3rd/foo-widget/init/:id', function(req, res) {
-//     var id = req.params.id;
-//     res.send('api response #'+id);
-// });
 serverApp.use(express.static('server'));
 
-//3rd party using widgets served by platform server
+//simulate client server for testing how widget will be embedded
 var clientApp = express();
 clientApp.set('view engine', 'html');
 clientApp.engine('html', ejs.renderFile);
+clientApp.use("/styles", express.static(__dirname + "/styles"))
 
 clientApp.get('/', function(req, res) {
-
+  console.log(platformScript)
       res.render('client/index', {
           serverHost: serverHost,
           platformScript: platformScript
