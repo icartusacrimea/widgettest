@@ -10,10 +10,9 @@
         "website-config-id": 237,
         "eventPageSlug": "/events/",
         "useQueryStringForEventID": false,
-        "useQueryStringForSearchTerm": true,
-        //^ do we want set to true or false?
+        "useQueryStringForSearchTerm": false,
         "searchTermQueryStringKey": "",
-        "searchTermUrlPattern": "\/*\/(.*)\.html"
+        "searchTermUrlPattern": "\/test\/(.*)\.html"
     };
 
     // check for existence of jQuery; if none, load it
@@ -44,9 +43,10 @@
             }
         }
         else {
-            widgetSearchTerm = location.pathname.match(tn_eventWidget_settings.searchTermUrlPattern)[1];
+            var url = window.location.href;
+            var n = url.lastIndexOf('=');
+            var widgetSearchTerm = url.substring(n+1, url.length);
         }
-        console.log(widgetSearchTerm)
         return widgetSearchTerm;
     };
 
@@ -64,9 +64,9 @@
     function main() {
         jQuery(document).ready(function ($) {
 
-            var template = '<div id="eventResultsWidgetWrapper" class="container-fluid"><section id="eventResults"><!-- {{#results}} --><article class="result-card container container-fluid"><div class="row"><div class="col-2 centerVertical borderRight"><p class="normalParagraph">{{date.text.date}}</p><p class="normalParagraph">{{date.date}}</p><p class="normalParagraph">{{date.text.time}}</p></div><div class="col-7 centerVertical"><p class="title">{{text.name}}</p><p class="normalParagraph slightlyBoldParagraph">{{venue.text.name}}</p><p class="normalParagraph">{{city.text.name}}, {{stateProvince.text.name}}, {{country.text.name}}</p></div><div class="col-3 centerVertical alignRight"><a href="{{settings.eventPageSlug}}{{id}}"><div class="btn btn-success ticketsButton">Buy Tickets  ></div></a><p class="normalParagraph">{{_metadata.eTickets.ticketCount}} ticket(s) remaining</p></div></div></article><!-- {{/results}} --></section></div>';
+            var template = '<div id="eventResultsWidgetWrapper" class="container-fluid"><section id="eventResults"><!-- {{#results}} --><article class="result-card container container-fluid"><div class="row"><div class="col-2 centerVertical borderRight"><p class="normalParagraph">{{date.text.date}}</p><p class="normalParagraph">{{date.date}}</p><p class="normalParagraph">{{date.text.time}}</p></div><div class="col-7 centerVertical"><p class="title">{{text.name}}</p><p class="normalParagraph slightlyBoldParagraph">{{venue.text.name}}</p><p class="normalParagraph">{{city.text.name}}, {{stateProvince.text.name}}, {{country.alphaCode}}</p></div><div class="col-3 centerVertical alignRight"><a href="{{settings.eventPageSlug}}{{id}}"><div class="btn btn-success ticketsButton">Buy Tickets  ></div></a><p class="normalParagraph">{{_metadata.eTickets.ticketCount}} ticket(s) remaining</p></div></div></article><!-- {{/results}} --></section></div>';
 
-            var catalogUrl = "https://dev.tn-apis.com/catalog/v1/events/" + getSearchTerm(),
+            var catalogUrl = "https://dev.tn-apis.com/catalog/v1/events/search?q=" + getSearchTerm(),
                 targetContainer = tn_eventWidget_settings.targetContainer,
                 eventResults = $.ajax({
                     url: catalogUrl,

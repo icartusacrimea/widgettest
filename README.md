@@ -1,9 +1,13 @@
 Events-listing widget that calls (dev, for now) Catalog API.
 
 Temporarily works out 'domain url' from IP address to run locally. This will eventually be replaced with actual domain.
-Simulates third-party server by actually serving 'client' from our directory.
+Simulates third-party server by serving 'client' directory.
 
-Can be customized to generate widgets using one of two methods: same-page DOM or iframes.
+Directions for Testing:
 
-Credit to resources:
-[Creating Embeddable Widgets in HTML and JS](http://blog.bguiz.com/articles/embeddable-widgets-html-javascript/)
+1. clone repo
+2. cd widgettest
+3. npm init
+4. npm install
+5. node index.js
+6. type search team in search bar on simulated client site
